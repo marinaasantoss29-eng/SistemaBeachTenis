@@ -133,7 +133,7 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
                         type="number"
                         name="placarA[]"
                         min="0"
-                        max="4"
+                        max="10"
                         value="<?= htmlspecialchars($partida["placarA"] ?? "") ?>"
                         required
                     >
@@ -143,7 +143,7 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
                         type="number"
                         name="placarB[]"
                         min="0"
-                        max="4"
+                        max="10"
                         value="<?= htmlspecialchars($partida["placarB"] ?? "") ?>"
                         required
                     >
@@ -172,7 +172,9 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
     <?php endforeach; ?>
 
     <br>
-    <a href="../index.php">Voltar ao início</a>
+    <a href="../index.php">
+    <button>Voltar ao início</button>
+</a>
 </div>
 
 </body>

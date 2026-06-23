@@ -6,6 +6,7 @@ $apelidos = $_POST["apelido"] ?? [];
 $formato = $_POST["formato"] ?? "";
 
 $participantes = [];
+$nomesVerificados = [];
 
 for ($i = 0; $i < count($nomes); $i++) {
     $nome = trim($nomes[$i]);
@@ -15,6 +16,18 @@ for ($i = 0; $i < count($nomes); $i++) {
         header("Location: cadastro.php");
         exit;
     }
+
+    $nomeMinusculo = mb_strtolower($nome, "UTF-8");
+
+    if (in_array($nomeMinusculo, $nomesVerificados)) {
+        echo "<script>
+            alert('Não é permitido cadastrar nomes iguais.');
+            window.location.href = 'cadastro.php';
+        </script>";
+        exit;
+    }
+
+    $nomesVerificados[] = $nomeMinusculo;
 
     $participantes[] = [
         "id" => $i + 1,

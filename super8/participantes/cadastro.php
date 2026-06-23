@@ -66,8 +66,10 @@ if ($formato != "") {
 
     <?php endif; ?>
 
-    <br>
-    <a href="../index.php">Voltar ao início</a>
+    <br><br>
+    <a href="../index.php">
+    <button>Voltar ao início</button>
+</a>
 </div>
 
 </body>

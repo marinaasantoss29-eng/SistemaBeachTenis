@@ -456,3 +456,18 @@ th {
         max-width: none;
     }
 }
+.grupo-botoes{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.grupo-botoes a{
+    text-decoration: none;
+}
+
+.grupo-botoes button{
+    min-width: 220px;
+}
