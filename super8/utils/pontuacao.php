@@ -20,7 +20,30 @@ function criar_ranking_inicial($participantes) {
     return $ranking;
 }
 
+function criar_chave_dupla($dupla) {
+    $ids = array_column($dupla, "id");
+    sort($ids, SORT_NUMERIC);
+    return implode("_", $ids);
+}
+
+function criar_nome_dupla($dupla) {
+    usort($dupla, function($a, $b) {
+        return $a["id"] <=> $b["id"];
+    });
+    return $dupla[0]["nome"] . " / " . $dupla[1]["nome"];
+}
+
 function calcular_ranking($participantes, $rodadas) {
+    $formato = $rodadas[0]["formato"] ?? "rotativas";
+
+    if ($formato == "fixas") {
+        return calcular_ranking_duplas_fixas($rodadas);
+    }
+
+    return calcular_ranking_jogadores($participantes, $rodadas);
+}
+
+function calcular_ranking_jogadores($participantes, $rodadas) {
     $ranking = criar_ranking_inicial($participantes);
 
     foreach ($rodadas as $rodada) {
@@ -71,6 +94,89 @@ function calcular_ranking($participantes, $rodadas) {
         }
     }
 
+    ordenar_ranking($ranking);
+
+    return $ranking;
+}
+
+function calcular_ranking_duplas_fixas($rodadas) {
+    $ranking = [];
+
+    foreach ($rodadas as $rodada) {
+        foreach ($rodada["partidas"] as $partida) {
+
+            if ($partida["placarA"] === null || $partida["placarB"] === null) {
+                continue;
+            }
+
+            $placarA = $partida["placarA"];
+            $placarB = $partida["placarB"];
+
+            $chaveA = criar_chave_dupla($partida["duplaA"]);
+            $chaveB = criar_chave_dupla($partida["duplaB"]);
+
+            if (!isset($ranking[$chaveA])) {
+                $ranking[$chaveA] = [
+                    "id" => $chaveA,
+                    "nome" => criar_nome_dupla($partida["duplaA"]),
+                    "jogos" => 0,
+                    "vitorias" => 0,
+                    "derrotas" => 0,
+                    "games_pro" => 0,
+                    "games_contra" => 0,
+                    "saldo" => 0,
+                    "pontos" => 0
+                ];
+            }
+
+            if (!isset($ranking[$chaveB])) {
+                $ranking[$chaveB] = [
+                    "id" => $chaveB,
+                    "nome" => criar_nome_dupla($partida["duplaB"]),
+                    "jogos" => 0,
+                    "vitorias" => 0,
+                    "derrotas" => 0,
+                    "games_pro" => 0,
+                    "games_contra" => 0,
+                    "saldo" => 0,
+                    "pontos" => 0
+                ];
+            }
+
+            $ranking[$chaveA]["jogos"]++;
+            $ranking[$chaveA]["games_pro"] += $placarA;
+            $ranking[$chaveA]["games_contra"] += $placarB;
+            $ranking[$chaveA]["saldo"] = $ranking[$chaveA]["games_pro"] - $ranking[$chaveA]["games_contra"];
+            $ranking[$chaveA]["pontos"] += $placarA;
+
+            if ($placarA > $placarB) {
+                $ranking[$chaveA]["vitorias"]++;
+                $ranking[$chaveA]["pontos"] += 2;
+            } else {
+                $ranking[$chaveA]["derrotas"]++;
+            }
+
+            $ranking[$chaveB]["jogos"]++;
+            $ranking[$chaveB]["games_pro"] += $placarB;
+            $ranking[$chaveB]["games_contra"] += $placarA;
+            $ranking[$chaveB]["saldo"] = $ranking[$chaveB]["games_pro"] - $ranking[$chaveB]["games_contra"];
+            $ranking[$chaveB]["pontos"] += $placarB;
+
+            if ($placarB > $placarA) {
+                $ranking[$chaveB]["vitorias"]++;
+                $ranking[$chaveB]["pontos"] += 2;
+            } else {
+                $ranking[$chaveB]["derrotas"]++;
+            }
+        }
+    }
+
+    ordenar_ranking($ranking);
+
+    return $ranking;
+}
+
+function ordenar_ranking(&$ranking) {
     usort($ranking, function($a, $b) {
         if ($b["pontos"] != $a["pontos"]) {
             return $b["pontos"] - $a["pontos"];
@@ -82,8 +188,6 @@ function calcular_ranking($participantes, $rodadas) {
 
         return $b["games_pro"] - $a["games_pro"];
     });
-
-    return $ranking;
 }
 
 function calcular_pontos_partida(&$ranking, $partida) {

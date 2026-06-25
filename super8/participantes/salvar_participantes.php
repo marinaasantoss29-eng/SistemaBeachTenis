@@ -8,13 +8,23 @@ $formato = $_POST["formato"] ?? "";
 $participantes = [];
 $nomesVerificados = [];
 
+function voltar_para_cadastro($formato) {
+    $url = "cadastro.php";
+
+    if ($formato != "") {
+        $url .= "?formato=" . urlencode($formato);
+    }
+
+    header("Location: " . $url);
+    exit;
+}
+
 for ($i = 0; $i < count($nomes); $i++) {
     $nome = trim($nomes[$i]);
     $apelido = trim($apelidos[$i]);
 
     if ($nome == "") {
-        header("Location: cadastro.php");
-        exit;
+        voltar_para_cadastro($formato);
     }
 
     $nomeMinusculo = mb_strtolower($nome, "UTF-8");
@@ -22,7 +32,7 @@ for ($i = 0; $i < count($nomes); $i++) {
     if (in_array($nomeMinusculo, $nomesVerificados)) {
         echo "<script>
             alert('Não é permitido cadastrar nomes iguais.');
-            window.location.href = 'cadastro.php';
+            window.location.href = 'cadastro.php?formato=" . htmlspecialchars($formato, ENT_QUOTES, "UTF-8") . "';
         </script>";
         exit;
     }
@@ -37,8 +47,7 @@ for ($i = 0; $i < count($nomes); $i++) {
 }
 
 if (count($participantes) != 8) {
-    header("Location: cadastro.php");
-    exit;
+    voltar_para_cadastro($formato);
 }
 
 gravar_json("../data/participantes.json", $participantes);

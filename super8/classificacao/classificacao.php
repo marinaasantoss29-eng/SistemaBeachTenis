@@ -27,7 +27,9 @@ $campeao = $ranking[0];
     <h1>Tabela de Classificação</h1>
 
     <div class="card">
-        <h2>🏆 Campeão Atual</h2>
+        <h2>
+    🏆 <?= ($rodadas[0]["formato"] ?? "") == "fixas" ? "Dupla Campeã" : "Líder da Classificação" ?>
+</h2>
         <p>
             <strong><?= htmlspecialchars($campeao["nome"]) ?></strong><br>
             Pontos: <?= $campeao["pontos"] ?><br>
@@ -41,11 +43,6 @@ $campeao = $ranking[0];
         <strong>+1 ponto</strong>.
     </p>
 
-    <p>
-        Critério de desempate: maior pontuação, depois maior saldo de games,
-        depois maior número de games vencidos.
-    </p>
-
     <div class="acoes-classificacao">
         <button onclick="window.print()">Imprimir Classificação</button>
     </div>
@@ -54,7 +51,7 @@ $campeao = $ranking[0];
         <table>
             <tr>
                 <th>Posição</th>
-                <th>Jogador</th>
+                <th><?= ($rodadas[0]["formato"] ?? "") == "fixas" ? "Dupla" : "Jogador" ?></th>
                 <th>Total de Pontos</th>
                 <th>Partidas</th>
                 <th>Vitórias</th>
@@ -80,7 +77,7 @@ $campeao = $ranking[0];
         </table>
     </div>
 
-    <p>Última atualização: <?= date("d/m/Y H:i") ?></p>
+    
 
     <br>
 
