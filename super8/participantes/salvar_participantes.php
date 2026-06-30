@@ -30,8 +30,9 @@ for ($i = 0; $i < count($nomes); $i++) {
     $nomeMinusculo = mb_strtolower($nome, "UTF-8");
 
     if (in_array($nomeMinusculo, $nomesVerificados)) {
-        echo "<script>
-            alert('Não é permitido cadastrar nomes iguais.');
+        echo "<script src='../js/ui.js'></script>
+        <script>
+            Super8UI.exibirAlerta('Não é permitido cadastrar nomes iguais.');
             window.location.href = 'cadastro.php?formato=" . htmlspecialchars($formato, ENT_QUOTES, "UTF-8") . "';
         </script>";
         exit;

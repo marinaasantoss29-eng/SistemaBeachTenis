@@ -17,11 +17,17 @@
         <a href="participantes/cadastro.php">2. Cadastrar Participantes</a>
         <a href="rodadas/rodadas.php">3. Lançar Placares</a>
         <a href="classificacao/classificacao.php">4. Ver Classificação</a>
-        <a href="reiniciar.php" onclick="return confirm('Tem certeza que deseja reiniciar o torneio?')">
+        <a
+            href="reiniciar.php"
+            data-confirmar-reinicio
+            data-mensagem-confirmacao="Tem certeza que deseja reiniciar o torneio?"
+        >
             Reiniciar Torneio
         </a>
     </div>
 </div>
+
+<script src="js/ui.js"></script>
 
 </body>
 </html>

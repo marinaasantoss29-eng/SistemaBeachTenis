@@ -20,16 +20,18 @@ for ($i = 0; $i < count($indicesPartidas); $i++) {
     $placarB = intval($placaresB[$i]);
 
     if ($placarA < 0 || $placarA > 10 || $placarB < 0 || $placarB > 10) {
-        echo "<script>
-            alert('A pontuação deve ser de 0 até 10.');
+        echo "<script src='../js/ui.js'></script>
+        <script>
+            Super8UI.exibirAlerta('A pontuação deve ser de 0 até 10.');
             window.history.back();
         </script>";
         exit;
     }
 
     if ($placarA == $placarB) {
-        echo "<script>
-            alert('O sistema não aceita empate. Escolha uma dupla vencedora colocando 1 ponto a mais para ela.');
+        echo "<script src='../js/ui.js'></script>
+        <script>
+            Super8UI.exibirAlerta('O sistema não aceita empate. Escolha uma dupla vencedora colocando 1 ponto a mais para ela.');
             window.history.back();
         </script>";
         exit;
@@ -41,6 +43,6 @@ for ($i = 0; $i < count($indicesPartidas); $i++) {
 
 gravar_json("../data/rodadas.json", $rodadas);
 
-header("Location: resultado_rodada.php?rodada=" . urlencode($indiceRodada));
+header("Location: rodadas.php?editar=" . urlencode($indiceRodada) . "&salvo=1");
 exit;
 ?>

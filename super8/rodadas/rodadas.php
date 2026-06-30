@@ -33,6 +33,7 @@ function partidas_pendentes($rodada) {
 $rodadaAtual = null;
 $indiceRodada = null;
 $indiceEdicao = isset($_GET["editar"]) ? intval($_GET["editar"]) : null;
+$placarSalvo = isset($_GET["salvo"]) && $_GET["salvo"] == "1";
 
 if ($indiceEdicao !== null && isset($rodadas[$indiceEdicao])) {
     $rodadaAtual = $rodadas[$indiceEdicao];
@@ -101,6 +102,12 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
 
     <?php else: ?>
 
+        <?php if ($placarSalvo && $modoEdicao): ?>
+            <div class="card">
+                <strong>Placar salvo com sucesso.</strong>
+            </div>
+        <?php endif; ?>
+
         <h2>
             <?= $modoEdicao ? "Editar" : "Rodada" ?>
             <?= $rodadaAtual["numero"] ?> de 7
@@ -164,8 +171,7 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
             <div class="card">
                 <strong>Rodada <?= $rodada["numero"] ?></strong>
                 <div class="acoes-rodada">
-                    <a href="resultado_rodada.php?rodada=<?= $i ?>">Ver placar</a>
-                    <a href="rodadas.php?editar=<?= $i ?>">Editar placar</a>
+                    <a href="rodadas.php?editar=<?= $i ?>">Ver/Editar placar</a>
                 </div>
             </div>
         <?php endif; ?>
@@ -176,6 +182,8 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
     <button>Voltar ao início</button>
 </a>
 </div>
+
+    <script src="../js/ui.js"></script>
 
 </body>
 </html>

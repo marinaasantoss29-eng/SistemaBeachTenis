@@ -44,7 +44,7 @@ $campeao = $ranking[0];
     </p>
 
     <div class="acoes-classificacao">
-        <button onclick="window.print()">Imprimir Classificação</button>
+        <button type="button" data-imprimir-pagina>Imprimir Classificação</button>
     </div>
 
     <div class="table-responsive">
@@ -91,6 +91,8 @@ $campeao = $ranking[0];
         <button>Voltar ao início</button>
     </a>
 </div>
+
+<script src="../js/ui.js"></script>
 
 </body>
 </html>

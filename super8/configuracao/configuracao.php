@@ -55,5 +55,7 @@ require_once "../utils/json_helper.php";
     <a href="../index.php" class="voltar">Voltar ao início</a>
 </div>
 
+<script src="../js/ui.js"></script>
+
 </body>
 </html>
