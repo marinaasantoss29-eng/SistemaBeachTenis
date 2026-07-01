@@ -15,6 +15,10 @@ body {
     box-shadow: 0 0 10px #ccc;
 }
 
+.resultado-container {
+    max-width: 720px;
+}
+
 h1, h2 {
     color: #0b7285;
 }
@@ -325,6 +329,109 @@ th {
     font-weight: 700;
 }
 
+.placares-finalizados {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.placar-finalizado {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid #d9e5e8;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.placar-finalizado span {
+    color: #52636d;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.placar-finalizado strong {
+    text-align: right;
+}
+
+.resultado-rodada {
+    display: grid;
+    gap: 18px;
+    margin-top: 22px;
+}
+
+.placar-quadra h2 {
+    margin-top: 0;
+}
+
+.placar-grande {
+    margin: 16px 0;
+    color: #0b7285;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.linha-placar-final {
+    display: grid;
+    grid-template-columns: 1fr 72px;
+    gap: 14px;
+    align-items: center;
+    padding: 14px;
+    border: 1px solid #d9e5e8;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.linha-placar-final + .linha-placar-final {
+    margin-top: 10px;
+}
+
+.linha-placar-final span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    border-radius: 8px;
+    background: #f3f8fb;
+    color: #10223d;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.linha-placar-final.vencedora {
+    border-color: #0b7285;
+    background: #e8f7fb;
+}
+
+.linha-placar-final.vencedora span {
+    background: #0b7285;
+    color: #ffffff;
+}
+
+.botoes-resultado {
+    display: block !important;
+    margin-top: 18px;
+}
+
+.botoes-resultado a {
+    display: block;
+    width: fit-content;
+    margin-top: 12px;
+    text-decoration: none;
+}
+
+.botoes-resultado button {
+    width: auto;
+    min-width: 0;
+}
+
+.voltar-inicio-link {
+    color: #0b7285;
+    text-decoration: underline !important;
+}
+
 .table-responsive {
     width: 100%;
     overflow-x: auto;
@@ -430,6 +537,19 @@ th {
     .acoes-classificacao a,
     .acoes-classificacao a button {
         width: 100%;
+    }
+
+    .placar-finalizado {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .placar-finalizado strong {
+        text-align: left;
+    }
+
+    .linha-placar-final {
+        grid-template-columns: 1fr 58px;
     }
 
     button {

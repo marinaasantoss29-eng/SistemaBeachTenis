@@ -43,6 +43,6 @@ for ($i = 0; $i < count($indicesPartidas); $i++) {
 
 gravar_json("../data/rodadas.json", $rodadas);
 
-header("Location: rodadas.php?editar=" . urlencode($indiceRodada) . "&salvo=1");
+header("Location: rodadas.php?resultado=" . urlencode($indiceRodada));
 exit;
 ?>

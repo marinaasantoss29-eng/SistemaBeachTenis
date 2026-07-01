@@ -31,11 +31,16 @@ function partidas_pendentes($rodada) {
 }
 
 $rodadaAtual = null;
+$rodadaResultado = null;
+$proximaRodada = null;
 $indiceRodada = null;
 $indiceEdicao = isset($_GET["editar"]) ? intval($_GET["editar"]) : null;
+$indiceResultado = isset($_GET["resultado"]) ? intval($_GET["resultado"]) : null;
 $placarSalvo = isset($_GET["salvo"]) && $_GET["salvo"] == "1";
 
-if ($indiceEdicao !== null && isset($rodadas[$indiceEdicao])) {
+if ($indiceResultado !== null && isset($rodadas[$indiceResultado])) {
+    $rodadaResultado = $rodadas[$indiceResultado];
+} elseif ($indiceEdicao !== null && isset($rodadas[$indiceEdicao])) {
     $rodadaAtual = $rodadas[$indiceEdicao];
     $indiceRodada = $indiceEdicao;
 } else {
@@ -48,7 +53,15 @@ if ($indiceEdicao !== null && isset($rodadas[$indiceEdicao])) {
     }
 }
 
+foreach ($rodadas as $i => $rodada) {
+    if (!rodada_completa($rodada)) {
+        $proximaRodada = $i;
+        break;
+    }
+}
+
 $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
+$todasFinalizadas = $proximaRodada === null;
 ?>
 
 <!DOCTYPE html>
@@ -60,7 +73,81 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
 </head>
 <body>
 
-<div class="container">
+<div class="container <?= $rodadaResultado !== null ? "resultado-container" : "" ?>">
+    <?php if ($rodadaResultado !== null): ?>
+
+        <h1>Resultado da Rodada <?= htmlspecialchars($rodadaResultado["numero"]) ?></h1>
+
+        <div class="card">
+            <strong>Rodada encerrada com sucesso.</strong>
+            <p>Confira os placares antes de continuar.</p>
+        </div>
+
+        <div class="resultado-rodada">
+            <?php foreach ($rodadaResultado["partidas"] as $partida): ?>
+                <?php
+                    $placarA = intval($partida["placarA"]);
+                    $placarB = intval($partida["placarB"]);
+                    $duplaAVenceu = $placarA > $placarB;
+                ?>
+
+                <div class="card placar-quadra">
+                    <h2>Quadra <?= htmlspecialchars($partida["quadra"]) ?></h2>
+
+                    <p>
+                        <strong>
+                            <?= htmlspecialchars($partida["duplaA"][0]["nome"]) ?> /
+                            <?= htmlspecialchars($partida["duplaA"][1]["nome"]) ?>
+                        </strong>
+                        X
+                        <strong>
+                            <?= htmlspecialchars($partida["duplaB"][0]["nome"]) ?> /
+                            <?= htmlspecialchars($partida["duplaB"][1]["nome"]) ?>
+                        </strong>
+                    </p>
+
+                    <div class="placar-grande">
+                        <?= htmlspecialchars($partida["placarA"]) ?>
+                        x
+                        <?= htmlspecialchars($partida["placarB"]) ?>
+                    </div>
+
+                    <p>
+                        Vencedores:
+                        <strong>
+                            <?php if ($duplaAVenceu): ?>
+                                <?= htmlspecialchars($partida["duplaA"][0]["nome"]) ?> /
+                                <?= htmlspecialchars($partida["duplaA"][1]["nome"]) ?>
+                            <?php else: ?>
+                                <?= htmlspecialchars($partida["duplaB"][0]["nome"]) ?> /
+                                <?= htmlspecialchars($partida["duplaB"][1]["nome"]) ?>
+                            <?php endif; ?>
+                        </strong>
+                    </p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="botoes-resultado">
+            <?php if ($todasFinalizadas): ?>
+                <a href="../classificacao/classificacao.php">
+                    <button>Ver Classificação</button>
+                </a>
+            <?php else: ?>
+                <a href="rodadas.php">
+                    <button>Ir para Próxima Rodada</button>
+                </a>
+            <?php endif; ?>
+
+            <a href="rodadas.php?editar=<?= urlencode($indiceResultado) ?>">
+                <button type="button">Editar Placar desta Rodada</button>
+            </a>
+
+            <a class="voltar-inicio-link" href="../index.php">Voltar ao início</a>
+        </div>
+
+    <?php else: ?>
+
     <h1>Lançamento de Placares</h1>
 
     <div class="status-rodadas">
@@ -89,6 +176,12 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
         <?php endforeach; ?>
     </div>
 
+    <?php if ($placarSalvo): ?>
+        <div class="card">
+            <strong>Placar salvo com sucesso.</strong>
+        </div>
+    <?php endif; ?>
+
     <?php if ($rodadaAtual === null): ?>
 
         <div class="card">
@@ -101,12 +194,6 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
         </a>
 
     <?php else: ?>
-
-        <?php if ($placarSalvo && $modoEdicao): ?>
-            <div class="card">
-                <strong>Placar salvo com sucesso.</strong>
-            </div>
-        <?php endif; ?>
 
         <h2>
             <?= $modoEdicao ? "Editar" : "Rodada" ?>
@@ -170,8 +257,10 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
         <?php if (rodada_completa($rodada)): ?>
             <div class="card">
                 <strong>Rodada <?= $rodada["numero"] ?></strong>
+
                 <div class="acoes-rodada">
-                    <a href="rodadas.php?editar=<?= $i ?>">Ver/Editar placar</a>
+                    <a href="rodadas.php?resultado=<?= $i ?>">Ver placar</a>
+                    <a href="rodadas.php?editar=<?= $i ?>">Editar placar</a>
                 </div>
             </div>
         <?php endif; ?>
@@ -181,6 +270,7 @@ $modoEdicao = $indiceEdicao !== null && isset($rodadas[$indiceEdicao]);
     <a href="../index.php">
     <button>Voltar ao início</button>
 </a>
+    <?php endif; ?>
 </div>
 
     <script src="../js/ui.js"></script>

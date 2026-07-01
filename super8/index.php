@@ -1,3 +1,14 @@
+<?php
+if (isset($_GET["reiniciar"]) && $_GET["reiniciar"] == "1") {
+    require_once "utils/json_helper.php";
+
+    gravar_json("data/participantes.json", []);
+    gravar_json("data/rodadas.json", []);
+
+    header("Location: index.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -18,7 +29,7 @@
         <a href="rodadas/rodadas.php">3. Lançar Placares</a>
         <a href="classificacao/classificacao.php">4. Ver Classificação</a>
         <a
-            href="reiniciar.php"
+            href="index.php?reiniciar=1"
             data-confirmar-reinicio
             data-mensagem-confirmacao="Tem certeza que deseja reiniciar o torneio?"
         >
